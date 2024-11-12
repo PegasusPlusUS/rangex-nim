@@ -20,6 +20,16 @@ test "range_inclusive":
     s += i
   check s == 5050
 
+test "float_range_inclusive":
+  var s = 0.0
+  for i in float_range_inclusive(1.0, 100.0):
+    s += i
+  check s == 5050.0
+  s = 0.0
+  for i in float_range_inclusive(100.0, 1.0, -1.0):
+    s += i
+  check s == 5050.0
+
 test "range_exclusive":
   var s = 0
   for i in range_exclusive(1, 101):
@@ -29,6 +39,16 @@ test "range_exclusive":
   for i in range_exclusive(100, 0, -1):
     s += i
   check s == 5050
+
+test "float_range_exclusive":
+  var s = 0.0
+  for i in float_range_exclusive(1.0, 101.0):
+    s += i
+  check s == 5050.0
+  s = 0.0
+  for i in float_range_exclusive(100.0, 0.0, -1.0):
+    s += i
+  check s == 5050.0
 
 test "empty range":
   var s = 0
@@ -40,6 +60,16 @@ test "empty range":
     s += i
   check s == 0
 
+test "empty float range":
+  var s = 0.0
+  for i in float_range_inclusive(1.0, 1.0):
+    s += i
+  check s == 1.0
+  s = 0.0
+  for i in float_range_exclusive(1.0, 1.0):
+    s += i
+  check s == 0.0
+
 test "empty range backward":
   var s = 0
   for i in range_inclusive(1, 1, -1):
@@ -50,12 +80,12 @@ test "empty range backward":
     s += i
   check s == 0
 
-# test "float std":
-#   # Use the macro in a for loop directly
-#   for i in range_inclusive(1.0, 10.0, 2.0):   # Expands to countup(1, 10, 2)
-#       stdout.write(fmt"{i} ")
-#   stdout.write("\n")
-
-#   for i in range_inclusive(10.0, 1.0, -2.0):  # Expands to countdown(10, 1, -2)
-#       stdout.write(fmt"{i} ")
-#   stdout.write("\n")
+test "empty float range backward":
+  var s = 0.0
+  for i in float_range_inclusive(1.0, 1.0, -1.0):
+    s += i
+  check s == 1.0
+  s = 0.0
+  for i in float_range_exclusive(1.0, 1.0, -1.0):
+    s += i
+  check s == 0.0
