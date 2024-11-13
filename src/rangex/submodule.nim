@@ -51,25 +51,33 @@ macro float_range_exclusive*(start: float, stop: float, step: float = 1.0): unty
   else:
     error("Step must be non-zero")
 
+template compileMessage(msg: string) =
+  static:
+    echo "Compile-time message: " & msg
+
+template is_int_kind(token: NimNode): bool =
+  (token.kind == nnkIntLit) or
+  (token.kind == nnkInt8Lit) or
+  (token.kind == nnkInt16Lit) or
+  (token.kind == nnkInt32Lit) or
+  (token.kind == nnkInt64Lit) or
+  (token.kind == nnkUIntLit) or
+  (token.kind == nnkUInt8Lit) or
+  (token.kind == nnkUInt16Lit) or
+  (token.kind == nnkUInt32Lit) or
+  (token.kind == nnkUInt64Lit) or
+  (token.kind == nnkInfix)
+
 macro range_inclusive*(start, stop; step: untyped = nil): untyped =
   var stepValue = 0
   if step == nil:
-    static:
-        echo("step get default value 1")
     stepValue = 1
   else:
-    if step.kind == nnkIntLit:
-        echo(fmt"step.kind is {step.kind}")
+    if is_int_kind(step):
         stepValue = step.intVal
     else:
         stepValue = 1
-        static:
-            echo("step.kind is not nnkIntLit")
-        echo(fmt"step.kind is {step.kind}")
-        error(fmt"step.kind is {step.kind}")
 
-  #let stepValue = 1 #stepNode.intVal  # Get the integer value of `step`
-  
   if stepValue > 0:
     result = quote do: countup(`start`, `stop`, `stepValue`)
   elif stepValue < 0:
